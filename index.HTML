@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TV Show Episodes</title>
+  <style>
+    /* Add some basic styling to make the page look better */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #222;
+      color: #fff;
+      padding: 1em;
+      text-align: center;
+    }
+
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .episode {
+      width: 300px;
+      margin: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 1em;
+      box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .episode img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .episode h2 {
+      margin-top: 0;
+    }
+
+    .episode p {
+      text-align: justify;
+    }
+
+    footer {
+      background-color: rgb(7, 179, 141);
+      padding: 1em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TV Show Episodes</h1>
+    <form id="form" role="search">
+      <input type="search" id="query" name="q"
+       placeholder="Search..."
+       aria-label="Search through site content">
+      <button>Search</button>
+    </form>
+    <select id="episode-selector">
+      <option value="">All Episodes</option>
+    </select>
+  </header>
+  <main>
+    <!-- The list of episodes will be generated here by JavaScript -->
+  </main>
+  <footer>
+    Data provided by <a href="https://www.tvmaze.com/">TV Maze</a>
+  </footer>
+  <script>
+    // Get the list of episodes from the API
+    fetch('https://api.tvmaze.com/shows/82/episodes')
+      .then(response => response.json())
+      .then(episodes => {
+        // Create a new element for each episode and add it to the page
+        const main = document.querySelector('main');
+        episodes.forEach(episode => {
+          const episodeElem = document.createElement('div');
+          episodeElem.classList.add('episode');
+          episodeElem.innerHTML = `
+            <h2>${episode.name}</h2>
+            <p>${episode.season.toString().padStart(2, '0')}E${episode.number.toString().padStart(2, '0')}</p>
+            <img src="${episode.image.medium}">
+            <p>${episode.summary}</p>
+          `;
+          main.appendChild(episodeElem);
+        });
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+</html>
